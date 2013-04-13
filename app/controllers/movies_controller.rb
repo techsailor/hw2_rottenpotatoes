@@ -9,13 +9,30 @@ class MoviesController < ApplicationController
   def index
 #@movies = Movie.all
   @sby = params[:sortby]
-  if @sby == "title"
-    @movies = Movie.order("#{params[:sortby]} ASC")
-  elsif @sby == 'release_date'
-    @movies = Movie.order("#{params[:sortby]} ASC")
+  @all_ratings = Movie::VALID_RATINGS
+  @ratings = params[:ratings]
+  if ["title","release_date"].include? @sby
+    if !@ratings.nil?
+      @movies = Movie.find(:all, :conditions => {:rating => @ratings.keys}, :order => [@sby, 'ASC'].join(" "))
+    else
+      @movies = Movie.order("#{@sby} ASC ")
+    end
   else
-    @movies = Movie.all
+    if @ratings
+      @movies = Movie.find(:all, :conditions => {:rating => @ratings.keys})
+    else
+      @movies = Movie.all
+    end
   end
+
+#if @sby == "title"
+#    @movies = Movie.order("#{params[:sortby]} ASC")
+#  elsif @sby == 'release_date'
+#    @movies = Movie.order("#{params[:sortby]} ASC")
+#  else
+#    @movies = Movie.all
+#  end
+
 #  @movies = Movie.order('title ASC')
 #  @movies = Movie.order('release_date ASC')
   end

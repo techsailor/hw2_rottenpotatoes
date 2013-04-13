@@ -1,10 +1,23 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
 
+= form_tag movies_path, :method => :get do
+  Include: 
+  - @all_ratings.each do |rating|
+    = rating
+    = check_box_tag "ratings[#{rating}]", "1", (@ratings.nil? ? false : @ratings.has_key?(rating))
+  = submit_tag 'Refresh'
+
+
+-if ! @ratings.nil?
+  = @ratings.keys
+-else
+  No Filter active
+
 %table#movies
   %thead
     %tr
-      %th{:class => (@sby == 'title')? 'hilite':'lolite'}= link_to("Movie Title", movies_path({:sortby => 'title'}),{:id => 'title_header'})
+      %th{:class => (@sby == 'title')? 'hilite':'lolite'}= link_to("Movie Title", movies_path({:sortby => 'title', :ratings => @ratings} ),{:id => 'title_header'})
       %th Rating
       %th{:class => (@sby == 'release_date')? 'hilite':'lolite'}= link_to "Release Date", movies_path({:sortby => 'release_date'}),{:id => 'release_date_header'}
       %th{:class => "lolite", :sby => @sby} More Info

@@ -18,7 +18,7 @@ class MoviesController < ApplicationController
       @movies = Movie.order("#{@sby} ASC ")
     end
   else
-    if @ratings
+    if !@ratings.nil?
       @movies = Movie.find(:all, :conditions => {:rating => @ratings.keys})
     else
       @movies = Movie.all

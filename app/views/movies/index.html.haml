@@ -1,18 +1,18 @@
 -#  This file is app/views/movies/index.html.haml
 %h1 All Movies
 
-= form_tag movies_path({:sortby => 'title', :ratings => @ratings}), :method => :get do
+= form_tag movies_path({:sortby => 'title', :ratings => @ratings}), :method => :get, :id => "ratings_form" do
   Include: 
   - @all_ratings.each do |rating|
     = rating
     = check_box_tag "ratings[#{rating}]", "1", (@ratings.nil? ? false : @ratings.has_key?(rating))
-  = submit_tag 'Refresh'
+  = submit_tag 'Refresh' , :id => "ratings_submit"
 
 
--if ! @ratings.nil?
-  = @ratings.keys
--else
-  No Filter active
+-#if ! @ratings.nil?
+-#  = @ratings.keys
+-#-else
+-#  No Filter active
 
 %table#movies
   %thead

@@ -7,8 +7,19 @@ class MoviesController < ApplicationController
   end
 
   def index
+    session[:params] ||= {}
+    old = session[:params]
+
+    redirect_to movies_path({:sortby => old[:sortby], :ratings => old[:ratings]}) if (params[:sortby].blank? && old[:sortby].present?) || (params[:ratings].blank? && old[:ratings].present?)
+    params[:sortby] = old[:sortby] if params[:sortby].nil?
+    params[:ratings] = old[:ratings] if params[:ratings].nil?
+    session[:params] = {:sortby => params[:sortby], :ratings => params[:ratings]}
+    params = session[:params]
+
+
 #@movies = Movie.all
   @sby = params[:sortby]
+
   @all_ratings = Movie::VALID_RATINGS
   @ratings = params[:ratings]
   if ["title","release_date"].include? @sby
